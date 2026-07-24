@@ -182,9 +182,6 @@ function Images.cherry(x, y)
         {0, 0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
     }
     drawSprite(x, y, data, colors)
-    g.setForeground(0x00AA00)
-    g.set(x + 3, y - 1, "|")
-    g.set(x + 2, y - 2, "/")
 end
 
 function Images.seven(x, y)
@@ -233,8 +230,6 @@ function Images.orange(x, y)
         {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
     }
     drawSprite(x, y, data, colors)
-    g.setForeground(0x00AA00)
-    g.set(x + 2, y - 1, "*")
 end
 
 function Images.pickaxe(x, y)
@@ -322,9 +317,6 @@ function Images.apple(x, y)
         {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
     }
     drawSprite(x, y, data, colors)
-    g.setForeground(0x00AA00)
-    g.set(x + 2, y - 1, "*")
-    g.set(x + 3, y - 2, "`")
 end
 
 -- ============================================
@@ -446,40 +438,26 @@ function Game()
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
     
-    -- ===== РАМКА ВОКРУГ БАРАБАНОВ =====
+    -- РАМКА ВОКРУГ БАРАБАНОВ
     local frame_x = mid - 34
     local frame_y = 22
     local frame_w = 65
     local frame_h = 10
     
-    -- Верхняя граница
     g.setForeground(COLOR2)
     for i = 0, frame_w do
         g.set(frame_x + i, frame_y, "─")
-    end
-    
-    -- Нижняя граница
-    for i = 0, frame_w do
         g.set(frame_x + i, frame_y + frame_h, "─")
     end
-    
-    -- Левая граница
     for i = 0, frame_h do
         g.set(frame_x, frame_y + i, "│")
-    end
-    
-    -- Правая граница
-    for i = 0, frame_h do
         g.set(frame_x + frame_w, frame_y + i, "│")
     end
-    
-    -- Углы
     g.set(frame_x, frame_y, "┌")
     g.set(frame_x + frame_w, frame_y, "┐")
     g.set(frame_x, frame_y + frame_h, "└")
     g.set(frame_x + frame_w, frame_y + frame_h, "┘")
     
-    -- Текст "СЛОТЫ" по центру рамки (вверху)
     g.setForeground(COLOR1)
     local slot_text = " СЛОТЫ "
     local slot_x = frame_x + (frame_w / 2) - (unicode.len(slot_text) / 2)

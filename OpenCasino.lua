@@ -1,7 +1,7 @@
 --|============================|
 --|         OpenCasino.        |
 --|       Автор: SkyDrive_     |
---|   Адаптировано под GitHub  |
+--|   Моноскрипт - всё в одном |
 --|         2024               |
 --|============================|
 local component = require("component")
@@ -12,18 +12,367 @@ local shell = require("shell")
 local fs = require("filesystem")
 local unicode = require("unicode")
 local serial = require("serialization")
-
--- Загрузка библиотек с вашего GitHub
-if not fs.exists("/lib/Sky.lua") then
-    shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/sky.lua /lib/Sky.lua")
-end
-if not fs.exists("/lib/image.lua") then
-    shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/image.lua /lib/image.lua")
-end
-
-local Sky = require("Sky")
-local image = require("image")
 local g = component.gpu
+
+-- ============================================
+-- ============ БИБЛИОТЕКА SKY ================
+-- ============================================
+local Sky = {}
+local back = 0xffffff
+
+function Sky.Mid(w,y,text)
+    local _,n = string.gsub(text, "&","")
+    local l = unicode.len(text) - n * 2
+    local x = (w / 2) - (l / 2)
+    Sky.text(x, y, text)
+end
+
+function Sky.MidL(w,y,text)
+    w = 26
+    local _,n = string.gsub(text, "&","")
+    local l = unicode.len(text) - n * 2
+    local x = (w / 2) - (l / 2) + 2
+    Sky.text(x, y, text)
+end
+
+function Sky.MidR(w,y,text)
+    local _,n = string.gsub(text, "&","")
+    local l = unicode.len(text) - n * 2
+    local x = (w / 2) - (l / 2) + 14
+    Sky.text(x, y, text)
+end
+
+function Sky.ClearL(h)
+    g.fill(3,2,26,h-2,' ')
+end
+
+function Sky.ClearR(w,h)
+    g.fill(31,2,w-32,h-2,' ')
+end
+
+function Sky.com(command)
+    if component.isAvailable("opencb") then
+        local _,c = component.opencb.execute(command)
+        return c
+    end
+    return ""
+end
+
+function Sky.Money(nick)
+    local c = Sky.com("money " .. nick)
+    local _, b = string.find(c, "Баланс: §f")
+    local balance
+    if string.find(c, "Emeralds") ~= nil then
+        balance = unicode.sub(c, b - 16, unicode.len(c) - 10)
+    else
+        balance = unicode.sub(c, b - 16, unicode.len(c) - 9)
+    end
+    return (balance)
+end
+
+function Sky.checkMoney(nick,price)
+    local balance = Sky.Money(nick)
+    balance = string.sub(balance, 1, string.len(balance) - 3)
+    if string.find(balance, "-") ~= nil then
+        return false
+    else
+        balance = string.gsub(balance,",","")
+        if tonumber(balance) < price then
+            return false
+        else
+            Sky.com("money take " .. nick .. " " .. price)
+            return true
+        end
+    end
+end
+
+function Sky.logo(name,col1,col2,w,h)
+    term.clear()
+    g.setBackground(0x000000)
+    g.setForeground(col2)
+    for i = 1, w do
+        g.set(i,1,"=")
+        g.set(i,h,"=")
+    end
+    for i = 1, h do
+        g.set(1, i, "||")
+        g.set(29, i, "||")
+        g.set(w-1, i, "||")
+    end
+    Sky.text(w/2 - unicode.len("[ " .. name .. " ]")/2 + 14, 1, "[ " .. name .. " ]")
+    g.set(w-42, h, "[ Автор: SkyDrive_ - Проект: McSkill ]")
+    g.setForeground(col1)
+    g.set(w/2+1 - unicode.len(name)/2 + 14, 1, name)
+    g.set(w-40, h, "Автор: SkyDrive_ - Проект: McSkill")
+end
+
+function Sky.setColor(index)
+    if (index ~= "r") then back = g.getForeground() end
+    if (index == "0") then g.setForeground(0x333333) end
+    if (index == "1") then g.setForeground(0x0000ff) end
+    if (index == "2") then g.setForeground(0x00ff00) end
+    if (index == "3") then g.setForeground(0x24b3a7) end
+    if (index == "4") then g.setForeground(0xff0000) end
+    if (index == "5") then g.setForeground(0x8b00ff) end
+    if (index == "6") then g.setForeground(0xffa500) end
+    if (index == "7") then g.setForeground(0xbbbbbb) end
+    if (index == "8") then g.setForeground(0x808080) end
+    if (index == "9") then g.setForeground(0x0000ff) end
+    if (index == "a") then g.setForeground(0x66ff66) end
+    if (index == "b") then g.setForeground(0x00ffff) end
+    if (index == "c") then g.setForeground(0xff6347) end
+    if (index == "d") then g.setForeground(0xff00ff) end
+    if (index == "e") then g.setForeground(0xffff00) end
+    if (index == "f") then g.setForeground(0xffffff) end
+    if (index == "g") then g.setForeground(0x00ff00) end
+    if (index == "r") then g.setForeground(back) end
+end
+
+function Sky.text(x,y,text)
+    local n = 1
+    for i = 1, unicode.len(text) do
+        if unicode.sub(text, i,i) == "&" then
+            Sky.setColor(unicode.sub(text, i + 1, i + 1))
+        elseif unicode.sub(text, i - 1, i - 1) ~= "&" then
+            g.set(x+n,y, unicode.sub(text, i,i))
+            n = n + 1
+        end
+    end
+end
+
+function Sky.Button(x,y,w,h,col1,col2,text)
+    g.setForeground(col1)
+    g.set(x + w/2 - unicode.len(text)/2, y+h/2, text)
+    g.setForeground(col2)
+    for i = 1, w-2 do
+        g.set(x+i,y,"─")
+        g.set(x+i,y+h-1,"─")
+    end
+    for i = 1, h-2 do
+        g.set(x,y+i,"│")
+        g.set(x+w-1,y+i,"│")
+    end
+    g.set(x,y,"┌")
+    g.set(x+w-1,y,"┐")
+    g.set(x,y+h-1,"└")
+    g.set(x+w-1,y+h-1,"┘")
+end
+
+function Sky.drawImage(x,y,path)
+    -- Заглушка - просто выводим текст
+    g.setForeground(0xFFD700)
+    g.set(x, y, "OpenCasino")
+end
+
+-- ============================================
+-- ============ БИБЛИОТЕКА IMAGE ==============
+-- ============================================
+local ImageLib = {}
+
+local COLORS = {
+    RED = 0xFF0000,
+    GREEN = 0x00FF00,
+    BLUE = 0x0000FF,
+    YELLOW = 0xFFFF00,
+    ORANGE = 0xFFA500,
+    PURPLE = 0x8B00FF,
+    PINK = 0xFF69B4,
+    BROWN = 0x8B4513,
+    WHITE = 0xFFFFFF,
+    BLACK = 0x000000,
+    GOLD = 0xFFD700,
+    SILVER = 0xC0C0C0,
+    CHERRY_RED = 0xCC0000,
+    MEAT_PINK = 0xFF6B6B,
+    CHEESE_YELLOW = 0xFFD700,
+    DIAMOND_BLUE = 0x00BFFF,
+    SEVEN_RED = 0xFF0000,
+    PICKAXE_GRAY = 0x808080,
+    APPLE_RED = 0xFF3333,
+    POKEBALL_RED = 0xFF0000,
+    POKEBALL_WHITE = 0xFFFFFF,
+    POKEBALL_BLACK = 0x333333,
+    ORANGE_FRUIT = 0xFF8C00,
+}
+
+local function drawSprite(x, y, data, colors)
+    for row = 1, #data do
+        for col = 1, #data[row] do
+            local char = data[row][col]
+            if char ~= " " then
+                local colorIndex = colors[row][col] or 1
+                g.setForeground(colorIndex)
+                g.set(x + col - 1, y + row - 1, char)
+            end
+        end
+    end
+end
+
+function ImageLib.cherry(x, y)
+    local data = {
+        {" ", "█", "█", "█", " ", " "},
+        {"█", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", "█"},
+        {" ", " ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0, 0},
+        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
+        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
+        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
+        {0, 0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0x00AA00)
+    g.set(x + 3, y - 1, "|")
+    g.set(x + 2, y - 2, "/")
+end
+
+function ImageLib.seven(x, y)
+    g.setForeground(COLORS.SEVEN_RED)
+    g.set(x, y, "█████")
+    g.set(x, y + 1, "   █ ")
+    g.set(x, y + 2, "  █  ")
+    g.set(x, y + 3, " █   ")
+    g.set(x, y + 4, "█████")
+    g.setForeground(0xFF6666)
+    g.set(x + 1, y, "██")
+    g.set(x + 3, y + 4, "██")
+end
+
+function ImageLib.diamond(x, y)
+    local data = {
+        {" ", " ", "█", " ", " "},
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+        {" ", " ", "█", " ", " "},
+    }
+    local colors = {
+        {0, 0, COLORS.DIAMOND_BLUE, 0, 0},
+        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
+        {COLORS.DIAMOND_BLUE, 0x66CCFF, 0xFFFFFF, 0x66CCFF, COLORS.DIAMOND_BLUE},
+        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
+        {0, 0, COLORS.DIAMOND_BLUE, 0, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function ImageLib.orange(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0x00AA00)
+    g.set(x + 2, y - 1, "*")
+end
+
+function ImageLib.pickaxe(x, y)
+    g.setForeground(COLORS.PICKAXE_GRAY)
+    g.set(x + 2, y, "█")
+    g.set(x + 1, y + 1, "███")
+    g.set(x, y + 2, "█████")
+    g.set(x + 1, y + 3, "█ █")
+    g.set(x + 2, y + 4, "█")
+    g.setForeground(0x8B6914)
+    g.set(x + 2, y + 5, "█")
+    g.set(x + 2, y + 6, "█")
+end
+
+function ImageLib.cheese(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
+        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
+        {COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW},
+        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
+        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function ImageLib.pokeball(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, 0},
+        {COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED},
+        {COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_BLACK, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED},
+        {COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE},
+        {0, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function ImageLib.meat(x, y)
+    local data = {
+        {" ", "█", "█", " ", " "},
+        {"█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█"},
+        {" ", " ", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0, 0},
+        {COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
+        {COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK},
+        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK},
+        {0, 0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0xFFFFFF)
+    g.set(x + 1, y + 1, "█")
+    g.set(x + 3, y + 3, "█")
+end
+
+function ImageLib.apple(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
+        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
+        {COLORS.APPLE_RED, COLORS.APPLE_RED, 0, COLORS.APPLE_RED, COLORS.APPLE_RED},
+        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
+        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0x00AA00)
+    g.set(x + 2, y - 1, "*")
+    g.set(x + 3, y - 2, "`")
+end
+
+-- ============================================
+-- ============ ОСНОВНАЯ ПРОГРАММА ============
+-- ============================================
+
 event.shouldInterrupt = function () return false end
 
 --------------------Настройки--------------------
@@ -39,15 +388,13 @@ local STAVKA = 10
 local MAX_STAVKA = 500
 -------------------------------------------------
 
-print("\nИнициализация...")
-os.sleep(2)
-print("Запуск программы...")
-os.sleep(2)
+print("\n=== OpenCasino ===")
+print("Инициализация...")
+os.sleep(1)
 
 local mid = (WIGHT - 32) / 2 + 32
 local images = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
 local login = false
-local summa = 0
 local timer = 0
 local smile = false
 local summa_money
@@ -170,15 +517,15 @@ function Game()
 end
 
 function Image(pic, x, y)
-    if pic == "cherry" then image.cherry(x, y)
-    elseif pic == "seven" then image.seven(x, y)
-    elseif pic == "diamond" then image.diamond(x, y)
-    elseif pic == "orange" then image.orange(x, y)
-    elseif pic == "pickaxe" then image.pickaxe(x, y)
-    elseif pic == "cheese" then image.cheese(x, y)
-    elseif pic == "pokeball" then image.pokeball(x, y)
-    elseif pic == "meat" then image.meat(x, y)
-    elseif pic == "apple" then image.apple(x, y)
+    if pic == "cherry" then ImageLib.cherry(x, y)
+    elseif pic == "seven" then ImageLib.seven(x, y)
+    elseif pic == "diamond" then ImageLib.diamond(x, y)
+    elseif pic == "orange" then ImageLib.orange(x, y)
+    elseif pic == "pickaxe" then ImageLib.pickaxe(x, y)
+    elseif pic == "cheese" then ImageLib.cheese(x, y)
+    elseif pic == "pokeball" then ImageLib.pokeball(x, y)
+    elseif pic == "meat" then ImageLib.meat(x, y)
+    elseif pic == "apple" then ImageLib.apple(x, y)
     end
 end
 
@@ -277,13 +624,13 @@ function Exit()
     g.fill(3,2,26,HEIGHT-2,' ')
     g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
     Rules()
-    -- Логотип заменен на простой текст
+    -- Простой логотип текстом
     g.setForeground(0xFFD700)
     g.set(mid - 25, 7, "OpenCasino")
     g.setForeground(COLOR1)
-    image.cherry(mid - 30, 24)
-    image.apple(mid - 10, 24)
-    image.meat(mid + 10, 24)
+    ImageLib.cherry(mid - 30, 24)
+    ImageLib.apple(mid - 10, 24)
+    ImageLib.meat(mid + 10, 24)
     local users = computer.users()
     for i = 1, #users do
         computer.removeUser(users[i])
@@ -305,9 +652,7 @@ function Say(bonus, nick, stavka)
     if component.isAvailable("chat_box") then
         component.chat_box.say(msg)
     end
-end
-
-function getStavka(w, h)
+endfunction getStavka(w, h)
     if w >= mid-30 and w <= mid-25 and h >= 37 and h <= 39 then
         stavka = stavka - 10
     elseif w >= mid-23 and w <= mid-19 and h >= 37 and h <= 39 then

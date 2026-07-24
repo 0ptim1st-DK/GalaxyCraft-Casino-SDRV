@@ -1,7 +1,7 @@
 --|============================|
 --|         OpenCasino.        |
---|       Автор: SkyDrive_     |
---|   Моноскрипт - всё в одном |
+--|       Упрощенная версия    |
+--|    Баланс: 5000 эм.        |
 --|         2024               |
 --|============================|
 local component = require("component")
@@ -48,42 +48,6 @@ end
 
 function Sky.ClearR(w,h)
     g.fill(31,2,w-32,h-2,' ')
-end
-
-function Sky.com(command)
-    if component.isAvailable("opencb") then
-        local _,c = component.opencb.execute(command)
-        return c
-    end
-    return ""
-end
-
-function Sky.Money(nick)
-    local c = Sky.com("money " .. nick)
-    local _, b = string.find(c, "Баланс: §f")
-    local balance
-    if string.find(c, "Emeralds") ~= nil then
-        balance = unicode.sub(c, b - 16, unicode.len(c) - 10)
-    else
-        balance = unicode.sub(c, b - 16, unicode.len(c) - 9)
-    end
-    return (balance)
-end
-
-function Sky.checkMoney(nick,price)
-    local balance = Sky.Money(nick)
-    balance = string.sub(balance, 1, string.len(balance) - 3)
-    if string.find(balance, "-") ~= nil then
-        return false
-    else
-        balance = string.gsub(balance,",","")
-        if tonumber(balance) < price then
-            return false
-        else
-            Sky.com("money take " .. nick .. " " .. price)
-            return true
-        end
-    end
 end
 
 function Sky.logo(name,col1,col2,w,h)
@@ -156,11 +120,6 @@ function Sky.Button(x,y,w,h,col1,col2,text)
     g.set(x+w-1,y,"┐")
     g.set(x,y+h-1,"└")
     g.set(x+w-1,y+h-1,"┘")
-end
-
-function Sky.drawImage(x,y,path)
-    g.setForeground(0xFFD700)
-    g.set(x, y, "OpenCasino")
 end
 
 -- ============================================
@@ -385,6 +344,7 @@ local RED = 0
 local CHAT_NAME = "§8[§2OpenCasino§8]: "
 local STAVKA = 10
 local MAX_STAVKA = 500
+local START_BALANCE = 5000 -- Стартовый баланс
 -------------------------------------------------
 
 print("\n=== OpenCasino ===")
@@ -393,11 +353,11 @@ os.sleep(1)
 
 local mid = (WIGHT - 32) / 2 + 32
 local image_list = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
-local login = false
 local timer = 0
 local smile = false
-local summa_money
+local balance = START_BALANCE -- Баланс игрока
 local stavka = STAVKA
+local game_active = false
 
 if component.isAvailable("chat_box") then
     component.chat_box.setName("§6G§7")
@@ -426,47 +386,6 @@ function Wins(win1, win2, win3)
     end
 end
 
-function money_all()
-    local file
-    local money_path = shell.getWorkingDirectory() .. "/moneyCasino"
-    if fs.exists(money_path) then
-        file = io.open(money_path, "r")
-        local text = file:read(9999999)
-        file:close()
-        local object = serial.unserialize(text)
-        summa_money = {object[1] or 0, object[2] or 0}
-        return summa_money[1], summa_money[2]
-    else
-        file = io.open(money_path, "w")
-        file:write("{0,0}")
-        file:close()
-        summa_money = {0,0}
-        return 0,0
-    end
-end
-
-function Login(w,h,nick)
-    if w and h and w >= 7 and w <= 24 and h >= 37 and h <= 39 then
-        if not login then
-            computer.addUser(nick)
-            login = true
-            g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
-            g.setForeground(COLOR2)
-            Sky.MidL(WIGHT,28,"Добро пожаловать")
-            Sky.MidL(WIGHT,31,"Ваш баланс:")
-            g.setForeground(COLOR1)
-            Sky.MidL(WIGHT,29,nick)
-            Sky.MidL(WIGHT,32, "[ " .. Sky.Money(nick) .. " ]")
-            Sky.Button(7,37,18,3,COLOR1,COLOR2,"    Выход    ")
-            stavka = STAVKA
-            Game()
-            computer.beep(TONE, 0.05)
-        else
-            Exit()
-        end
-    end
-end
-
 function autoExit()
     timer = timer - 1
     g.setForeground(COLOR2)
@@ -483,13 +402,10 @@ function autoExit()
 end
 
 function Game()
-    Sky.Button(mid-30,37,6,3,COLOR1,COLOR2, "-10$")
-    Sky.Button(mid-23,37,5,3,COLOR1,COLOR2, "-5$")
-    Sky.Button(mid-17,37,5,3,COLOR1,COLOR2, "-1$")
-    Sky.Button(mid-11,37,20,3,COLOR1,COLOR2, "Ставка " .. STAVKA .. "$")
-    Sky.Button(mid+10,37,5,3,COLOR1,COLOR2, "+1$")
-    Sky.Button(mid+16,37,5,3,COLOR1,COLOR2, "+5$")
-    Sky.Button(mid+22,37,6,3,COLOR1,COLOR2, "+10$")
+    -- Очищаем игровую область
+    g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
+    
+    -- Информация о выигрышах
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,3, "Инфа о выигрышах:")
     Sky.MidR(WIGHT,5, "Выигрыш = ставка * на бонус")
@@ -508,6 +424,27 @@ function Game()
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,20, "Минимальная ставка: 1$")
     Sky.MidR(WIGHT,21, "Максимальная ставка: " .. MAX_STAVKA .. "$")
+    Sky.MidR(WIGHT,23, "Нажмите на кнопку 'Играть'")
+    
+    -- Баланс
+    Sky.MidL(WIGHT,28, "Ваш баланс:")
+    g.setForeground(COLOR1)
+    Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
+    
+    -- Кнопки
+    Sky.Button(mid-30,37,6,3,COLOR1,COLOR2, "-10$")
+    Sky.Button(mid-23,37,5,3,COLOR1,COLOR2, "-5$")
+    Sky.Button(mid-17,37,5,3,COLOR1,COLOR2, "-1$")
+    Sky.Button(mid-11,37,20,3,COLOR1,COLOR2, "Играть")
+    Sky.Button(mid+10,37,5,3,COLOR1,COLOR2, "+1$")
+    Sky.Button(mid+16,37,5,3,COLOR1,COLOR2, "+5$")
+    Sky.Button(mid+22,37,6,3,COLOR1,COLOR2, "+10$")
+    
+    -- Ставка
+    g.setForeground(COLOR1)
+    Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
+    
+    -- Барабаны
     local x, y = mid - 30, 24
     for i = 1, 3 do
         DrawImage(image_list[math.random(1,#image_list)], x, y)
@@ -558,147 +495,110 @@ function Table(rand1, rand2, rand3)
     return win[1], win[2], win[3]
 end
 
-function Start(w, h, nick, stavka)
-    if Sky.checkMoney(nick, stavka) then
-        computer.beep(TONE, 0.05)
-        local file = io.open(shell.getWorkingDirectory() .. "/moneyCasino", "w")
-        summa_money[1] = summa_money[1] + stavka
-        file:write("{" .. summa_money[1] .. "," .. summa_money[2] .. "}")
-        file:close()
+function Start()
+    if game_active then return end
+    if balance < stavka then
         g.setForeground(COLOR1)
-        Sky.MidL(WIGHT,11, summa_money[1] .. " эм.")
-        Sky.MidL(WIGHT,35,"      Идёт игра...      ")
-        Sky.MidL(WIGHT,32, " [ " .. Sky.Money(nick) .. " ] ")
-        Sky.MidR(WIGHT,35, "                    Крутим на " .. stavka .. "$                    ")
-        local rand1 = math.random(1, #image_list)
-        local rand2 = math.random(1, #image_list)
-        local rand3 = math.random(1, #image_list)
-        local bonus = Wins(Table(rand1, rand2, rand3))
-        g.setForeground(COLOR1)
-        if bonus ~= 0 then
-            local winAmount = stavka * bonus
-            Sky.com("money give " .. nick .. " " .. winAmount)
-            Sky.MidR(WIGHT,35,"Бонус ставки = x" .. bonus .. "  Вы выиграли: " .. winAmount .. "$")
-            local file = io.open(shell.getWorkingDirectory() .. "/moneyCasino", "w")
-            summa_money[2] = summa_money[2] + winAmount
-            file:write("{" .. summa_money[1] .. "," .. summa_money[2] .. "}")
-            file:close()
-            Sky.MidL(WIGHT,14, summa_money[2] .. " эм.")
-            Sky.MidL(WIGHT,32, "[ " .. Sky.Money(nick) .. " ]")
-            Say(bonus, nick, winAmount)
-            if bonus >= 10 then
-                component.redstone.setOutput(RED, 15)
-                os.sleep(1)
-                component.redstone.setOutput(RED, 0)
+        Sky.MidR(WIGHT,35, "Недостаточно средств! Баланс: " .. balance .. "$")
+        computer.beep(400, 0.3)
+        return
+    end
+    
+    game_active = true
+    computer.beep(TONE, 0.05)
+    
+    -- Списываем ставку
+    balance = balance - stavka
+    
+    g.setForeground(COLOR1)
+    Sky.MidL(WIGHT,11, "Идет игра...")
+    Sky.MidR(WIGHT,35, "Крутим на " .. stavka .. "$")
+    Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
+    
+    local rand1 = math.random(1, #image_list)
+    local rand2 = math.random(1, #image_list)
+    local rand3 = math.random(1, #image_list)
+    local bonus = Wins(Table(rand1, rand2, rand3))
+    
+    g.setForeground(COLOR1)
+    if bonus ~= 0 then
+        local winAmount = stavka * bonus
+        balance = balance + winAmount
+        Sky.MidR(WIGHT,35, "Бонус x" .. bonus .. "! Выиграно: " .. winAmount .. "$")
+        Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
+        
+        if bonus >= 10 then
+            component.redstone.setOutput(RED, 15)
+            os.sleep(0.5)
+            component.redstone.setOutput(RED, 0)
+        end
+        
+        -- Оповещение в чат
+        if component.isAvailable("chat_box") then
+            local msg = CHAT_NAME .. "§aВыиграно §5" .. winAmount .. " эм. "
+            if bonus == 15 then msg = msg .. "(3 вишни!)"
+            elseif bonus == 100 then msg = msg .. "(ДЖЕКПОТ! 3 семёрки!)"
+            elseif bonus == 40 then msg = msg .. "(3 алмаза!)"
+            elseif bonus == 20 then msg = msg .. "(3 апельсина!)"
+            elseif bonus == 12 then msg = msg .. "(3 кирки!)"
+            elseif bonus == 17 then msg = msg .. "(3 сыра!)"
+            elseif bonus == 10 then msg = msg .. "(3 покебола!)"
+            elseif bonus == 25 then msg = msg .. "(3 окорочка!)"
+            elseif bonus == 30 then msg = msg .. "(3 яблока!)"
             end
-        else
-            Sky.MidR(WIGHT,35, "                    Бонус ставки = x0  Вы проиграли                    ")
+            component.chat_box.say(msg)
         end
     else
-        Sky.MidR(WIGHT,35, "                             Недостаточно средств                             ")
+        Sky.MidR(WIGHT,35, "Бонус x0 - Проигрыш!")
     end
-end
-
-function Rules()
-    g.setForeground(COLOR2)
-    Sky.MidL(WIGHT,5,"==========================")
-    Sky.MidL(WIGHT,9,"==========================")
-    Sky.MidL(WIGHT,12,"==========================")
-    Sky.MidL(WIGHT,15,"==========================")
-    Sky.MidL(WIGHT,10, "Всего потрачено:")
-    Sky.MidL(WIGHT,13, "Всего выиграно:")
-    g.setForeground(COLOR1)
-    Sky.MidL(WIGHT,3, "Общая инфа:")
-    Sky.MidL(WIGHT,6, "Вы играете на свой")
-    Sky.MidL(WIGHT,7, "страх и риск")
-    Sky.MidL(WIGHT,8, "Эмы не возвращаются")
-    local money_in, money_out = money_all()
-    Sky.MidL(WIGHT,11, money_in .. " эм.")
-    Sky.MidL(WIGHT,14, money_out .. " эм.")
-    Sky.Button(7,37,18,3,COLOR1,COLOR2, "Залогиниться")
-end
-
-function Exit()
-    login = false
-    g.fill(3,2,26,HEIGHT-2,' ')
-    g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
-    Rules()
-    g.setForeground(0xFFD700)
-    g.set(mid - 25, 7, "OpenCasino")
-    g.setForeground(COLOR1)
-    Images.cherry(mid - 30, 24)
-    Images.apple(mid - 10, 24)
-    Images.meat(mid + 10, 24)
     
-    -- Безопасное удаление пользователей
-    local users = computer.users()
-    if users then
-        for i = 1, #users do
-            computer.removeUser(users[i])
-        end
-    end
-end
-
-function Say(bonus, nick, stavka)
-    local msg = CHAT_NAME .. "§5" .. nick .. " §aВыиграл §5" .. stavka .. " эм. "
-    if bonus == 15 then msg = msg .. "(3 вишни!)"
-    elseif bonus == 100 then msg = msg .. "(ДЖЕКПОТ! 3 семёрки!)"
-    elseif bonus == 40 then msg = msg .. "(3 алмаза!)"
-    elseif bonus == 20 then msg = msg .. "(3 апельсина!)"
-    elseif bonus == 12 then msg = msg .. "(3 кирки!)"
-    elseif bonus == 17 then msg = msg .. "(3 сыра!)"
-    elseif bonus == 10 then msg = msg .. "(3 покебола!)"
-    elseif bonus == 25 then msg = msg .. "(3 окорочка!)"
-    elseif bonus == 30 then msg = msg .. "(3 яблока!)"
-    end
-    if component.isAvailable("chat_box") then
-        component.chat_box.say(msg)
-    end
+    os.sleep(1)
+    game_active = false
+    Game()
 end
 
 function getStavka(w, h)
     if w >= mid-30 and w <= mid-25 and h >= 37 and h <= 39 then
-        stavka = stavka - 10
+        stavka = math.max(1, stavka - 10)
     elseif w >= mid-23 and w <= mid-19 and h >= 37 and h <= 39 then
-        stavka = stavka - 5
+        stavka = math.max(1, stavka - 5)
     elseif w >= mid-17 and w <= mid-13 and h >= 37 and h <= 39 then
-        stavka = stavka - 1
+        stavka = math.max(1, stavka - 1)
     elseif w >= mid+10 and w <= mid+14 and h >= 37 and h <= 39 then
-        stavka = stavka + 1
+        stavka = math.min(MAX_STAVKA, stavka + 1)
     elseif w >= mid+16 and w <= mid+20 and h >= 37 and h <= 39 then
-        stavka = stavka + 5
+        stavka = math.min(MAX_STAVKA, stavka + 5)
     elseif w >= mid+22 and w <= mid+27 and h >= 37 and h <= 39 then
-        stavka = stavka + 10
+        stavka = math.min(MAX_STAVKA, stavka + 10)
     else
         return
-    end
-    if stavka > MAX_STAVKA then
-        stavka = MAX_STAVKA
-    elseif stavka < 1 then
-        stavka = 1
     end
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
 end
 
-Exit()
+-- Запуск игры
+Game()
 
+-- Основной цикл
 while true do
     local e, _, w, h, _, nick = event.pull(1, "touch")
     if e == "touch" then
-        Login(w, h, nick)
-        if login then
-            getStavka(w, h)
-            if w >= mid-11 and w <= mid+8 and h >= 37 and h <= 39 then
-                Start(w, h, nick, stavka)
-            end
+        -- Проверка нажатия кнопок
+        getStavka(w, h)
+        
+        -- Кнопка "Играть"
+        if w >= mid-11 and w <= mid+8 and h >= 37 and h <= 39 then
+            Start()
         end
+        
         timer = AUTOEXIT
     end
-    if login then
-        autoExit()
-        if timer == 0 then
-            Exit()
-        end
+    
+    autoExit()
+    if timer == 0 then
+        -- Перезапуск игры
+        Game()
+        timer = AUTOEXIT
     end
 end

@@ -358,7 +358,7 @@ local smile = false
 local balance = START_BALANCE
 local stavka = STAVKA
 local game_active = false
-local in_game = false  -- Флаг: находимся ли в игре
+local in_game = false
 
 if component.isAvailable("chat_box") then
     component.chat_box.setName("§6G§7")
@@ -390,7 +390,6 @@ function MainMenu()
     g.setForeground(COLOR1)
     Sky.Mid(WIGHT, 20, "Ваш стартовый баланс: " .. balance .. " эм.")
     
-    -- Кнопка "Войти в игру"
     Sky.Button(mid - 20, 30, 40, 4, COLOR1, COLOR2, "  Войти в игру  ")
     
     g.setForeground(0x666666)
@@ -403,7 +402,6 @@ end
 -- ============ ИГРОВОЙ ЭКРАН =================
 -- ============================================
 function Game()
-    -- Очищаем игровую область
     g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
     
     -- Информация о выигрышах
@@ -432,7 +430,7 @@ function Game()
     g.setForeground(COLOR1)
     Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
     
-    -- Кнопка "Выйти" в левой части
+    -- Кнопка "Выйти"
     Sky.Button(7, 37, 18, 3, COLOR1, COLOR2, "  Выйти  ")
     
     -- Кнопки ставок
@@ -448,7 +446,46 @@ function Game()
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
     
-    -- Барабаны
+    -- ===== РАМКА ВОКРУГ БАРАБАНОВ =====
+    local frame_x = mid - 34
+    local frame_y = 22
+    local frame_w = 65
+    local frame_h = 10
+    
+    -- Верхняя граница
+    g.setForeground(COLOR2)
+    for i = 0, frame_w do
+        g.set(frame_x + i, frame_y, "─")
+    end
+    
+    -- Нижняя граница
+    for i = 0, frame_w do
+        g.set(frame_x + i, frame_y + frame_h, "─")
+    end
+    
+    -- Левая граница
+    for i = 0, frame_h do
+        g.set(frame_x, frame_y + i, "│")
+    end
+    
+    -- Правая граница
+    for i = 0, frame_h do
+        g.set(frame_x + frame_w, frame_y + i, "│")
+    end
+    
+    -- Углы
+    g.set(frame_x, frame_y, "┌")
+    g.set(frame_x + frame_w, frame_y, "┐")
+    g.set(frame_x, frame_y + frame_h, "└")
+    g.set(frame_x + frame_w, frame_y + frame_h, "┘")
+    
+    -- Текст "СЛОТЫ" по центру рамки (вверху)
+    g.setForeground(COLOR1)
+    local slot_text = " СЛОТЫ "
+    local slot_x = frame_x + (frame_w / 2) - (unicode.len(slot_text) / 2)
+    g.set(slot_x, frame_y, slot_text)
+    
+    -- Барабаны внутри рамки
     local x, y = mid - 30, 24
     for i = 1, 3 do
         DrawImage(image_list[math.random(1,#image_list)], x, y)
@@ -623,11 +660,9 @@ MainMenu()
 while true do
     local e, _, w, h, _, nick = event.pull(0.5, "touch")
     
-    -- Обновление таймера и смайлика в игре
     if in_game then
         timer = timer - 0.5
         
-        -- Обновляем смайлик и таймер каждые 0.5 секунды
         if timer > 0 then
             g.setForeground(COLOR1)
             if smile then
@@ -643,7 +678,6 @@ while true do
             g.set(24, 35, string.format("%2d", math.ceil(timer)) .. " ")
         end
         
-        -- Автовыход
         if timer <= 0 then
             computer.beep(400, 0.2)
             MainMenu()
@@ -652,29 +686,22 @@ while true do
     
     if e == "touch" then
         if not in_game then
-            -- Главное меню - проверка кнопки "Войти в игру"
             if w >= mid - 20 and w <= mid + 20 and h >= 30 and h <= 34 then
                 computer.beep(TONE, 0.05)
                 Game()
             end
         else
-            -- Игровой экран
-            
-            -- Проверка кнопки "Выйти"
             if w >= 7 and w <= 25 and h >= 37 and h <= 40 then
                 computer.beep(TONE, 0.05)
                 MainMenu()
             end
             
-            -- Кнопки ставок
             getStavka(w, h)
             
-            -- Кнопка "Играть"
             if w >= mid-11 and w <= mid+8 and h >= 37 and h <= 39 then
                 Start()
             end
             
-            -- Сброс таймера при касании
             timer = AUTOEXIT
         end
     end

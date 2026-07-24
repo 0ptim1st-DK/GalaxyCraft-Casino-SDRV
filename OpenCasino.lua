@@ -3,9 +3,6 @@
 --|       Автор: SkyDrive_     |
 --|   Адаптировано под GitHub  |
 --|         2024               |
---|    С автоматической        |
---|    очисткой перед          |
---|    установкой              |
 --|============================|
 local component = require("component")
 local computer = require("computer")
@@ -23,26 +20,13 @@ print("Очистка старых файлов...")
 local files_to_remove = {
     "/lib/Sky.lua",
     "/lib/image.lua",
-    shell.getWorkingDirectory() .. "/LogoCasino.lua",
-    shell.getWorkingDirectory() .. "/moneyCasino"
+    shell.getWorkingDirectory() .. "/LogoCasino.lua"
 }
 
 for _, file in ipairs(files_to_remove) do
     if fs.exists(file) then
         fs.remove(file)
         print("  Удалено: " .. file)
-    end
-end
-
--- Очистка временных файлов
-local tmp_files = fs.list("/tmp/")
-for _, file in ipairs(tmp_files) do
-    if file:match("^opencasino") or file:match("^oc_") or file:match("^casino") then
-        local full_path = "/tmp/" .. file
-        if fs.exists(full_path) then
-            fs.remove(full_path)
-            print("  Удалено: " .. full_path)
-        end
     end
 end
 
@@ -66,6 +50,7 @@ local g = component.gpu
 event.shouldInterrupt = function () return false end
 
 --------------------Настройки--------------------
+-- ЯВНО указываем числа
 local WIGHT = 146
 local HEIGHT = 42
 local AUTOEXIT = 30
@@ -90,6 +75,10 @@ os.sleep(2)
 print("Запуск программы...")
 os.sleep(2)
 
+-- ПРИНУДИТЕЛЬНО преобразуем в числа (на всякий случай)
+WIGHT = tonumber(WIGHT) or 146
+HEIGHT = tonumber(HEIGHT) or 42
+
 local mid = (WIGHT - 32) / 2 + 32
 local images = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
 local login = false
@@ -109,8 +98,9 @@ local maxW, maxH = g.getResolution()
 if WIGHT > maxW then WIGHT = maxW end
 if HEIGHT > maxH then HEIGHT = maxH end
 
-g.setResolution(WIGHT, HEIGHT)
-Sky.logo("OpenCasino", COLOR1, COLOR2, WIGHT, HEIGHT)
+-- ЯВНО передаем числа
+g.setResolution(tonumber(WIGHT), tonumber(HEIGHT))
+Sky.logo("OpenCasino", COLOR1, COLOR2, tonumber(WIGHT), tonumber(HEIGHT))
 
 function Wins(win1, win2, win3)
     if win1 == 1 and win2 == 1 and win3 == 1 then return 15

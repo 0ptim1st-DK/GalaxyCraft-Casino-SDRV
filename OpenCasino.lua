@@ -166,135 +166,7 @@ local function drawSprite(x, y, data, colors)
     end
 end
 
--- ===== ВИШНЯ (широкая) =====
 function Images.cherry(x, y)
-    local data = {
-        {" ", "█", "█", "█", "█", " ", " "},
-        {"█", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", "█"},
-        {" ", " ", "█", "█", "█", "█", " "},
-    }
-    local colors = {
-        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0, 0},
-        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
-        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
-        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
-        {0, 0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
-    }
-    drawSprite(x, y, data, colors)
-    g.setForeground(0x00AA00)
-    g.set(x + 3, y - 1, "|")
-    g.set(x + 2, y - 2, "/")
-    g.set(x + 4, y - 2, "\\")
-end
-
--- ===== СЕМЁРКА (широкая) =====
-function Images.seven(x, y)
-    g.setForeground(COLORS.SEVEN_RED)
-    g.set(x, y, "███████")
-    g.set(x, y + 1, "    █  ")
-    g.set(x, y + 2, "   █   ")
-    g.set(x, y + 3, "  █    ")
-    g.set(x, y + 4, "███████")
-    g.setForeground(0xFF6666)
-    g.set(x + 1, y, "███")
-    g.set(x + 4, y + 4, "███")
-end
-
--- ===== АЛМАЗ (широкий) =====
-function Images.diamond(x, y)
-    local data = {
-        {" ", " ", "█", "█", " ", " "},
-        {" ", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", " "},
-        {" ", " ", "█", "█", " ", " "},
-    }
-    local colors = {
-        {0, 0, COLORS.DIAMOND_BLUE, COLORS.DIAMOND_BLUE, 0, 0},
-        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
-        {COLORS.DIAMOND_BLUE, 0x66CCFF, 0xFFFFFF, 0xFFFFFF, 0x66CCFF, COLORS.DIAMOND_BLUE},
-        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
-        {0, 0, COLORS.DIAMOND_BLUE, COLORS.DIAMOND_BLUE, 0, 0},
-    }
-    drawSprite(x, y, data, colors)
-end
-
--- ===== АПЕЛЬСИН (широкий) =====
-function Images.orange(x, y)
-    local data = {
-        {" ", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", " "},
-    }
-    local colors = {
-        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
-        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
-        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0, 0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
-        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
-        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
-    }
-    drawSprite(x, y, data, colors)
-    g.setForeground(0x00AA00)
-    g.set(x + 2, y - 1, "*")
-end
-
--- ===== КИРКА (широкая) =====
-function Images.pickaxe(x, y)
-    g.setForeground(COLORS.PICKAXE_GRAY)
-    g.set(x + 2, y, " ██ ")
-    g.set(x + 1, y + 1, "████")
-    g.set(x, y + 2, "██████")
-    g.set(x + 1, y + 3, "█  █")
-    g.set(x + 2, y + 4, " ██ ")
-    g.setForeground(0x8B6914)
-    g.set(x + 2, y + 5, " ██ ")
-    g.set(x + 2, y + 6, " ██ ")
-end
-
--- ===== СЫР (широкий) =====
-function Images.cheese(x, y)
-    local data = {
-        {" ", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", " "},
-    }
-    local colors = {
-        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
-        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
-        {COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0, 0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW},
-        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
-        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
-    }
-    drawSprite(x, y, data, colors)
-end
-
--- ===== ПОКЕБОЛ (широкий) =====
-function Images.pokeball(x, y)
-    local data = {
-        {" ", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", " "},
-    }
-    local colors = {
-        {0, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, 0},
-        {COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED},
-        {COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_BLACK, COLORS.POKEBALL_BLACK, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED},
-        {COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE},
-        {0, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, 0},
-    }
-    drawSprite(x, y, data, colors)
-end
-
--- ===== МЯСО (широкое) =====
-function Images.meat(x, y)
     local data = {
         {" ", "█", "█", "█", " ", " "},
         {"█", "█", "█", "█", "█", " "},
@@ -303,11 +175,130 @@ function Images.meat(x, y)
         {" ", " ", "█", "█", "█", " "},
     }
     local colors = {
-        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0, 0},
-        {COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
-        {COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK, COLORS.MEAT_PINK},
-        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK},
-        {0, 0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
+        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0, 0},
+        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
+        {COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
+        {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED},
+        {0, 0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0x00AA00)
+    g.set(x + 3, y - 1, "|")
+    g.set(x + 2, y - 2, "/")
+end
+
+function Images.seven(x, y)
+    g.setForeground(COLORS.SEVEN_RED)
+    g.set(x, y, "█████")
+    g.set(x, y + 1, "   █ ")
+    g.set(x, y + 2, "  █  ")
+    g.set(x, y + 3, " █   ")
+    g.set(x, y + 4, "█████")
+    g.setForeground(0xFF6666)
+    g.set(x + 1, y, "██")
+    g.set(x + 3, y + 4, "██")
+end
+
+function Images.diamond(x, y)
+    local data = {
+        {" ", " ", "█", " ", " "},
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+        {" ", " ", "█", " ", " "},
+    }
+    local colors = {
+        {0, 0, COLORS.DIAMOND_BLUE, 0, 0},
+        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
+        {COLORS.DIAMOND_BLUE, 0x66CCFF, 0xFFFFFF, 0x66CCFF, COLORS.DIAMOND_BLUE},
+        {0, COLORS.DIAMOND_BLUE, 0x66CCFF, COLORS.DIAMOND_BLUE, 0},
+        {0, 0, COLORS.DIAMOND_BLUE, 0, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function Images.orange(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0xFFAA33, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT},
+        {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
+    }
+    drawSprite(x, y, data, colors)
+    g.setForeground(0x00AA00)
+    g.set(x + 2, y - 1, "*")
+end
+
+function Images.pickaxe(x, y)
+    g.setForeground(COLORS.PICKAXE_GRAY)
+    g.set(x + 2, y, "█")
+    g.set(x + 1, y + 1, "███")
+    g.set(x, y + 2, "█████")
+    g.set(x + 1, y + 3, "█ █")
+    g.set(x + 2, y + 4, "█")
+    g.setForeground(0x8B6914)
+    g.set(x + 2, y + 5, "█")
+    g.set(x + 2, y + 6, "█")
+end
+
+function Images.cheese(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
+        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
+        {COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW},
+        {COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW, 0xFFFF66, COLORS.CHEESE_YELLOW},
+        {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function Images.pokeball(x, y)
+    local data = {
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, 0},
+        {COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED},
+        {COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_BLACK, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED},
+        {COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_RED, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE},
+        {0, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, COLORS.POKEBALL_WHITE, 0},
+    }
+    drawSprite(x, y, data, colors)
+end
+
+function Images.meat(x, y)
+    local data = {
+        {" ", "█", "█", " ", " "},
+        {"█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█"},
+        {" ", " ", "█", "█", " "},
+    }
+    local colors = {
+        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0, 0},
+        {COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
+        {COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK, COLORS.MEAT_PINK},
+        {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0xFF9999, COLORS.MEAT_PINK},
+        {0, 0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0},
     }
     drawSprite(x, y, data, colors)
     g.setForeground(0xFFFFFF)
@@ -315,21 +306,20 @@ function Images.meat(x, y)
     g.set(x + 3, y + 3, "█")
 end
 
--- ===== ЯБЛОКО (широкое) =====
 function Images.apple(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█"},
+        {"█", "█", " ", "█", "█"},
+        {"█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", " "},
     }
     local colors = {
-        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
-        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
-        {COLORS.APPLE_RED, COLORS.APPLE_RED, 0, 0, COLORS.APPLE_RED, COLORS.APPLE_RED},
-        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
-        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
+        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
+        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
+        {COLORS.APPLE_RED, COLORS.APPLE_RED, 0, COLORS.APPLE_RED, COLORS.APPLE_RED},
+        {COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED, 0xFF6666, COLORS.APPLE_RED},
+        {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
     }
     drawSprite(x, y, data, colors)
     g.setForeground(0x00AA00)
@@ -346,7 +336,7 @@ event.shouldInterrupt = function () return false end
 --------------------Настройки--------------------
 local WIGHT = 146
 local HEIGHT = 42
-local AUTOEXIT = 30  -- 30 секунд до автовыхода
+local AUTOEXIT = 30
 local COLOR1 = 0x00ffff
 local COLOR2 = 0x0000ff
 local TONE = 600
@@ -363,12 +353,12 @@ os.sleep(1)
 
 local mid = (WIGHT - 32) / 2 + 32
 local image_list = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
-local timer = AUTOEXIT
+local timer = 0
 local smile = false
 local balance = START_BALANCE
 local stavka = STAVKA
 local game_active = false
-local in_game = false
+local in_game = false  -- Флаг: находимся ли в игре
 
 if component.isAvailable("chat_box") then
     component.chat_box.setName("§6G§7")
@@ -407,59 +397,40 @@ function MainMenu()
     Sky.Mid(WIGHT, 38, "Нажмите на кнопку, чтобы начать")
     
     in_game = false
-    timer = AUTOEXIT
 end
 
 -- ============================================
 -- ============ ИГРОВОЙ ЭКРАН =================
 -- ============================================
-function GameScreen()
-    term.clear()
-    g.setBackground(0x000000)
-    Sky.logo("OpenCasino", COLOR1, COLOR2, WIGHT, HEIGHT)
+function Game()
+    -- Очищаем игровую область
+    g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
     
     -- Информация о выигрышах
     g.setForeground(COLOR1)
-    Sky.MidR(WIGHT, 3, "Инфа о выигрышах:")
-    Sky.MidR(WIGHT, 5, "Выигрыш = ставка * бонус")
-    Sky.MidR(WIGHT, 7, "2 одинаковых по краям - x1")
-    Sky.MidR(WIGHT, 8, "2 одинаковых рядом - x2")
+    Sky.MidR(WIGHT,3, "Инфа о выигрышах:")
+    Sky.MidR(WIGHT,5, "Выигрыш = ставка * на бонус")
+    Sky.MidR(WIGHT,7, "Если 2 одинаковых предмета по краям - Бонус = х1")
+    Sky.MidR(WIGHT,8, "Если 2 одинаковых предмета рядом - Бонус = х2")
     g.setForeground(COLOR2)
-    Sky.MidR(WIGHT, 10, "3 покебола - x10")
-    Sky.MidR(WIGHT, 11, "3 кирки - x12")
-    Sky.MidR(WIGHT, 12, "3 вишни - x15")
-    Sky.MidR(WIGHT, 13, "3 сыра - x17")
-    Sky.MidR(WIGHT, 14, "3 апельсина - x20")
-    Sky.MidR(WIGHT, 15, "3 окорочка - x25")
-    Sky.MidR(WIGHT, 16, "3 яблока - x30")
-    Sky.MidR(WIGHT, 17, "3 алмаза - x40")
-    Sky.MidR(WIGHT, 18, "3 семёрки - x100")
+    Sky.MidR(WIGHT,10, "Три покебола - Бонус = х10")
+    Sky.MidR(WIGHT,11, "Три кирки - Бонус = х12")
+    Sky.MidR(WIGHT,12, "Три вишенки - Бонус = х15")
+    Sky.MidR(WIGHT,13, "Три сыра - Бонус = х17")
+    Sky.MidR(WIGHT,14, "Три апельсинчика - Бонус = х20")
+    Sky.MidR(WIGHT,15, "Три окорочка - Бонус = х25")
+    Sky.MidR(WIGHT,16, "Три яблочка - Бонус = х30")
+    Sky.MidR(WIGHT,17, "Три алмаза - Бонус = х40")
+    Sky.MidR(WIGHT,18, "Три семёрки - Бонус = х100")
     g.setForeground(COLOR1)
-    Sky.MidR(WIGHT, 20, "Мин. ставка: 1$")
-    Sky.MidR(WIGHT, 21, "Макс. ставка: " .. MAX_STAVKA .. "$")
+    Sky.MidR(WIGHT,20, "Минимальная ставка: 1$")
+    Sky.MidR(WIGHT,21, "Максимальная ставка: " .. MAX_STAVKA .. "$")
     
     -- Баланс
     g.setForeground(COLOR2)
-    Sky.MidL(WIGHT, 28, "Ваш баланс:")
+    Sky.MidL(WIGHT,28, "Ваш баланс:")
     g.setForeground(COLOR1)
-    Sky.MidL(WIGHT, 30, "[ " .. balance .. " эм. ]")
-    
-    -- ===== СМАЙЛИК И ТАЙМЕР =====
-    -- Смайлик
-    if smile then
-        g.setForeground(COLOR1)
-        Sky.MidL(WIGHT, 26, "__(^o^)__")
-    else
-        g.setForeground(COLOR1)
-        Sky.MidL(WIGHT, 26, " \\(^o^)/ ")
-    end
-    smile = not smile
-    
-    -- Таймер автовыхода
-    g.setForeground(COLOR2)
-    Sky.MidL(WIGHT, 35, "Авто выход через:  ")
-    g.setForeground(COLOR1)
-    g.set(24, 35, tostring(timer) .. " ")
+    Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
     
     -- Кнопка "Выйти" в левой части
     Sky.Button(7, 37, 18, 3, COLOR1, COLOR2, "  Выйти  ")
@@ -475,7 +446,7 @@ function GameScreen()
     
     -- Ставка
     g.setForeground(COLOR1)
-    Sky.MidR(WIGHT, 38, "  Ставка " .. stavka .. "$  ")
+    Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
     
     -- Барабаны
     local x, y = mid - 30, 24
@@ -485,6 +456,7 @@ function GameScreen()
     end
     
     in_game = true
+    timer = AUTOEXIT
 end
 
 function DrawImage(pic, x, y)
@@ -546,11 +518,11 @@ function Wins(win1, win2, win3)
     end
 end
 
-function StartGame()
+function Start()
     if game_active then return end
     if balance < stavka then
         g.setForeground(COLOR1)
-        Sky.MidR(WIGHT, 35, "Недостаточно средств! Баланс: " .. balance .. "$")
+        Sky.MidR(WIGHT,35, "Недостаточно средств! Баланс: " .. balance .. "$")
         computer.beep(400, 0.3)
         return
     end
@@ -561,9 +533,9 @@ function StartGame()
     balance = balance - stavka
     
     g.setForeground(COLOR1)
-    Sky.MidL(WIGHT, 11, "Идет игра...")
-    Sky.MidR(WIGHT, 35, "Крутим на " .. stavka .. "$")
-    Sky.MidL(WIGHT, 30, "[ " .. balance .. " эм. ]")
+    Sky.MidL(WIGHT,11, "Идет игра...")
+    Sky.MidR(WIGHT,35, "Крутим на " .. stavka .. "$")
+    Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
     
     local rand1 = math.random(1, #image_list)
     local rand2 = math.random(1, #image_list)
@@ -574,8 +546,8 @@ function StartGame()
     if bonus ~= 0 then
         local winAmount = stavka * bonus
         balance = balance + winAmount
-        Sky.MidR(WIGHT, 35, "Бонус x" .. bonus .. "! Выиграно: " .. winAmount .. "$")
-        Sky.MidL(WIGHT, 30, "[ " .. balance .. " эм. ]")
+        Sky.MidR(WIGHT,35, "Бонус x" .. bonus .. "! Выиграно: " .. winAmount .. "$")
+        Sky.MidL(WIGHT,30, "[ " .. balance .. " эм. ]")
         
         if bonus >= 10 then
             component.redstone.setOutput(RED, 15)
@@ -598,13 +570,13 @@ function StartGame()
             component.chat_box.say(msg)
         end
     else
-        Sky.MidR(WIGHT, 35, "Бонус x0 - Проигрыш!")
+        Sky.MidR(WIGHT,35, "Бонус x0 - Проигрыш!")
     end
     
-    os.sleep(1.5)
+    os.sleep(1)
     game_active = false
     timer = AUTOEXIT
-    GameScreen()
+    Game()
 end
 
 function getStavka(w, h)
@@ -624,7 +596,22 @@ function getStavka(w, h)
         return
     end
     g.setForeground(COLOR1)
-    Sky.MidR(WIGHT, 38, "  Ставка " .. stavka .. "$  ")
+    Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
+end
+
+function autoExit()
+    timer = timer - 1
+    g.setForeground(COLOR2)
+    Sky.MidL(WIGHT,35, "Авто выход через:  ")
+    g.setForeground(COLOR1)
+    g.set(24, 35, tostring(timer) .. " ")
+    if smile then
+        Sky.MidL(WIGHT,26, "__(^o^)__")
+        smile = false
+    else
+        Sky.MidL(WIGHT,26, " \\(^o^)/ ")
+        smile = true
+    end
 end
 
 -- ============================================
@@ -665,14 +652,14 @@ while true do
     
     if e == "touch" then
         if not in_game then
-            -- Главное меню
+            -- Главное меню - проверка кнопки "Войти в игру"
             if w >= mid - 20 and w <= mid + 20 and h >= 30 and h <= 34 then
                 computer.beep(TONE, 0.05)
-                timer = AUTOEXIT
-                GameScreen()
+                Game()
             end
         else
             -- Игровой экран
+            
             -- Проверка кнопки "Выйти"
             if w >= 7 and w <= 25 and h >= 37 and h <= 40 then
                 computer.beep(TONE, 0.05)
@@ -684,7 +671,7 @@ while true do
             
             -- Кнопка "Играть"
             if w >= mid-11 and w <= mid+8 and h >= 37 and h <= 39 then
-                StartGame()
+                Start()
             end
             
             -- Сброс таймера при касании

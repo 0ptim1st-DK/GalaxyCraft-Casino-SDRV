@@ -166,6 +166,7 @@ local function drawSprite(x, y, data, colors)
     end
 end
 
+-- ВИШНЯ (чистая, без стебельков)
 function Images.cherry(x, y)
     local data = {
         {" ", "█", "█", "█", " ", " "},
@@ -184,6 +185,7 @@ function Images.cherry(x, y)
     drawSprite(x, y, data, colors)
 end
 
+-- СЕМЁРКА
 function Images.seven(x, y)
     g.setForeground(COLORS.SEVEN_RED)
     g.set(x, y, "█████")
@@ -196,6 +198,7 @@ function Images.seven(x, y)
     g.set(x + 3, y + 4, "██")
 end
 
+-- АЛМАЗ
 function Images.diamond(x, y)
     local data = {
         {" ", " ", "█", " ", " "},
@@ -214,6 +217,7 @@ function Images.diamond(x, y)
     drawSprite(x, y, data, colors)
 end
 
+-- АПЕЛЬСИН (чистый, без листика)
 function Images.orange(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
@@ -232,6 +236,7 @@ function Images.orange(x, y)
     drawSprite(x, y, data, colors)
 end
 
+-- КИРКА
 function Images.pickaxe(x, y)
     g.setForeground(COLORS.PICKAXE_GRAY)
     g.set(x + 2, y, "█")
@@ -244,6 +249,7 @@ function Images.pickaxe(x, y)
     g.set(x + 2, y + 6, "█")
 end
 
+-- СЫР
 function Images.cheese(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
@@ -262,6 +268,7 @@ function Images.cheese(x, y)
     drawSprite(x, y, data, colors)
 end
 
+-- ПОКЕБОЛ
 function Images.pokeball(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
@@ -280,6 +287,7 @@ function Images.pokeball(x, y)
     drawSprite(x, y, data, colors)
 end
 
+-- МЯСО
 function Images.meat(x, y)
     local data = {
         {" ", "█", "█", " ", " "},
@@ -301,6 +309,7 @@ function Images.meat(x, y)
     g.set(x + 3, y + 3, "█")
 end
 
+-- ЯБЛОКО (чистое, без листиков)
 function Images.apple(x, y)
     local data = {
         {" ", "█", "█", "█", " "},

@@ -64,10 +64,10 @@ function Sky.logo(name,col1,col2,w,h)
         g.set(w-1, i, "||")
     end
     Sky.text(w/2 - unicode.len("[ " .. name .. " ]")/2 + 14, 1, "[ " .. name .. " ]")
-    g.set(w-42, h, "[ Автор: 0ptim1st - Проект: McSkill ]")
+    g.set(w-42, h, "[ Автор: SkyDrive_ - Проект: McSkill ]")
     g.setForeground(col1)
     g.set(w/2+1 - unicode.len(name)/2 + 14, 1, name)
-    g.set(w-40, h, "Автор: 0ptim1st - Проект: McSkill")
+    g.set(w-40, h, "Автор: SkyDrive_ - Проект: McSkill")
 end
 
 function Sky.setColor(index)
@@ -169,11 +169,11 @@ end
 -- ===== ВИШНЯ (широкая) =====
 function Images.cherry(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " ", " "},
-        {"█", "█", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", "█", "█"},
-        {" ", " ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", "█", " ", " "},
+        {"█", "█", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", "█", "█"},
+        {" ", " ", "█", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, COLORS.CHERRY_RED, 0, 0},
@@ -192,24 +192,24 @@ end
 -- ===== СЕМЁРКА (широкая) =====
 function Images.seven(x, y)
     g.setForeground(COLORS.SEVEN_RED)
-    g.set(x, y, "█████████")
-    g.set(x, y + 1, "    ███  ")
-    g.set(x, y + 2, "   ███   ")
-    g.set(x, y + 3, "  ███    ")
-    g.set(x, y + 4, "█████████")
+    g.set(x, y, "███████")
+    g.set(x, y + 1, "    █  ")
+    g.set(x, y + 2, "   █   ")
+    g.set(x, y + 3, "  █    ")
+    g.set(x, y + 4, "███████")
     g.setForeground(0xFF6666)
-    g.set(x + 1, y, "█████")
-    g.set(x + 4, y + 4, "█████")
+    g.set(x + 1, y, "███")
+    g.set(x + 4, y + 4, "███")
 end
 
 -- ===== АЛМАЗ (широкий) =====
 function Images.diamond(x, y)
     local data = {
-        {" ", " ", "█", "█", "█", " ", " "},
-        {" ", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", " "},
-        {" ", " ", "█", "█", "█", " ", " "},
+        {" ", " ", "█", "█", " ", " "},
+        {" ", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", " "},
+        {" ", " ", "█", "█", " ", " "},
     }
     local colors = {
         {0, 0, COLORS.DIAMOND_BLUE, COLORS.DIAMOND_BLUE, 0, 0},
@@ -224,11 +224,11 @@ end
 -- ===== АПЕЛЬСИН (широкий) =====
 function Images.orange(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {"█", "█", " ", " ", "█", "█"},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, COLORS.ORANGE_FRUIT, 0},
@@ -245,24 +245,24 @@ end
 -- ===== КИРКА (широкая) =====
 function Images.pickaxe(x, y)
     g.setForeground(COLORS.PICKAXE_GRAY)
-    g.set(x + 2, y, "  █████  ")
-    g.set(x + 1, y + 1, "███████")
-    g.set(x, y + 2, "█████████")
-    g.set(x + 1, y + 3, "███    ███")
-    g.set(x + 2, y + 4, "  █████  ")
+    g.set(x + 2, y, " ██ ")
+    g.set(x + 1, y + 1, "████")
+    g.set(x, y + 2, "██████")
+    g.set(x + 1, y + 3, "█  █")
+    g.set(x + 2, y + 4, " ██ ")
     g.setForeground(0x8B6914)
-    g.set(x + 2, y + 5, "  █████  ")
-    g.set(x + 2, y + 6, "  █████  ")
+    g.set(x + 2, y + 5, " ██ ")
+    g.set(x + 2, y + 6, " ██ ")
 end
 
 -- ===== СЫР (широкий) =====
 function Images.cheese(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {"█", "█", " ", " ", "█", "█"},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, COLORS.CHEESE_YELLOW, 0},
@@ -277,11 +277,11 @@ end
 -- ===== ПОКЕБОЛ (широкий) =====
 function Images.pokeball(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {"█", "█", " ", " ", "█", "█"},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, COLORS.POKEBALL_RED, 0},
@@ -296,11 +296,11 @@ end
 -- ===== МЯСО (широкое) =====
 function Images.meat(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " ", " "},
-        {"█", "█", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", "█", "█"},
-        {" ", " ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", " ", " "},
+        {"█", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", "█"},
+        {" ", " ", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.MEAT_PINK, COLORS.MEAT_PINK, COLORS.MEAT_PINK, 0, 0},
@@ -311,18 +311,18 @@ function Images.meat(x, y)
     }
     drawSprite(x, y, data, colors)
     g.setForeground(0xFFFFFF)
-    g.set(x + 1, y + 1, " █ ")
-    g.set(x + 3, y + 3, " █ ")
+    g.set(x + 1, y + 1, "█")
+    g.set(x + 3, y + 3, "█")
 end
 
 -- ===== ЯБЛОКО (широкое) =====
 function Images.apple(x, y)
     local data = {
-        {" ", "█", "█", "█", "█", "█", " "},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {"█", "█", " ", " ", " ", "█", "█"},
-        {"█", "█", "█", "█", "█", "█", "█"},
-        {" ", "█", "█", "█", "█", "█", " "},
+        {" ", "█", "█", "█", "█", " "},
+        {"█", "█", "█", "█", "█", "█"},
+        {"█", "█", " ", " ", "█", "█"},
+        {"█", "█", "█", "█", "█", "█"},
+        {" ", "█", "█", "█", "█", " "},
     }
     local colors = {
         {0, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, COLORS.APPLE_RED, 0},
@@ -346,7 +346,7 @@ event.shouldInterrupt = function () return false end
 --------------------Настройки--------------------
 local WIGHT = 146
 local HEIGHT = 42
-local AUTOEXIT = 60
+local AUTOEXIT = 30  -- 30 секунд до автовыхода
 local COLOR1 = 0x00ffff
 local COLOR2 = 0x0000ff
 local TONE = 600
@@ -363,12 +363,12 @@ os.sleep(1)
 
 local mid = (WIGHT - 32) / 2 + 32
 local image_list = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
-local timer = 0
+local timer = AUTOEXIT
 local smile = false
 local balance = START_BALANCE
 local stavka = STAVKA
 local game_active = false
-local in_game = false -- Флаг: на главном меню или в игре
+local in_game = false
 
 if component.isAvailable("chat_box") then
     component.chat_box.setName("§6G§7")
@@ -407,6 +407,7 @@ function MainMenu()
     Sky.Mid(WIGHT, 38, "Нажмите на кнопку, чтобы начать")
     
     in_game = false
+    timer = AUTOEXIT
 end
 
 -- ============================================
@@ -443,7 +444,24 @@ function GameScreen()
     g.setForeground(COLOR1)
     Sky.MidL(WIGHT, 30, "[ " .. balance .. " эм. ]")
     
-    -- Кнопка "Выход" в левой части
+    -- ===== СМАЙЛИК И ТАЙМЕР =====
+    -- Смайлик
+    if smile then
+        g.setForeground(COLOR1)
+        Sky.MidL(WIGHT, 26, "__(^o^)__")
+    else
+        g.setForeground(COLOR1)
+        Sky.MidL(WIGHT, 26, " \\(^o^)/ ")
+    end
+    smile = not smile
+    
+    -- Таймер автовыхода
+    g.setForeground(COLOR2)
+    Sky.MidL(WIGHT, 35, "Авто выход через:  ")
+    g.setForeground(COLOR1)
+    g.set(24, 35, tostring(timer) .. " ")
+    
+    -- Кнопка "Выйти" в левой части
     Sky.Button(7, 37, 18, 3, COLOR1, COLOR2, "  Выйти  ")
     
     -- Кнопки ставок
@@ -585,6 +603,7 @@ function StartGame()
     
     os.sleep(1.5)
     game_active = false
+    timer = AUTOEXIT
     GameScreen()
 end
 
@@ -615,23 +634,49 @@ end
 MainMenu()
 
 while true do
-    local e, _, w, h, _, nick = event.pull(1, "touch")
+    local e, _, w, h, _, nick = event.pull(0.5, "touch")
+    
+    -- Обновление таймера и смайлика в игре
+    if in_game then
+        timer = timer - 0.5
+        
+        -- Обновляем смайлик и таймер каждые 0.5 секунды
+        if timer > 0 then
+            g.setForeground(COLOR1)
+            if smile then
+                Sky.MidL(WIGHT, 26, "__(^o^)__")
+            else
+                Sky.MidL(WIGHT, 26, " \\(^o^)/ ")
+            end
+            smile = not smile
+            
+            g.setForeground(COLOR2)
+            Sky.MidL(WIGHT, 35, "Авто выход через:  ")
+            g.setForeground(COLOR1)
+            g.set(24, 35, string.format("%2d", math.ceil(timer)) .. " ")
+        end
+        
+        -- Автовыход
+        if timer <= 0 then
+            computer.beep(400, 0.2)
+            MainMenu()
+        end
+    end
     
     if e == "touch" then
         if not in_game then
             -- Главное меню
             if w >= mid - 20 and w <= mid + 20 and h >= 30 and h <= 34 then
                 computer.beep(TONE, 0.05)
+                timer = AUTOEXIT
                 GameScreen()
             end
         else
             -- Игровой экран
-            
             -- Проверка кнопки "Выйти"
             if w >= 7 and w <= 25 and h >= 37 and h <= 40 then
                 computer.beep(TONE, 0.05)
                 MainMenu()
-                timer = 0
             end
             
             -- Кнопки ставок
@@ -641,16 +686,8 @@ while true do
             if w >= mid-11 and w <= mid+8 and h >= 37 and h <= 39 then
                 StartGame()
             end
-        end
-        
-        timer = AUTOEXIT
-    end
-    
-    -- Автовыход (возврат в меню)
-    if in_game then
-        timer = timer - 1
-        if timer <= 0 then
-            MainMenu()
+            
+            -- Сброс таймера при касании
             timer = AUTOEXIT
         end
     end

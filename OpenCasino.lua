@@ -3,6 +3,9 @@
 --|       Автор: SkyDrive_     |
 --|   Адаптировано под GitHub  |
 --|         2024               |
+--|    С автоматической        |
+--|    очисткой перед          |
+--|    установкой              |
 --|============================|
 local component = require("component")
 local computer = require("computer")
@@ -13,11 +16,47 @@ local fs = require("filesystem")
 local unicode = require("unicode")
 local serial = require("serialization")
 
+print("\n=== OpenCasino Installer ===")
+print("Очистка старых файлов...")
+
+-- Очистка старых библиотек
+local files_to_remove = {
+    "/lib/Sky.lua",
+    "/lib/image.lua",
+    shell.getWorkingDirectory() .. "/LogoCasino.lua",
+    shell.getWorkingDirectory() .. "/moneyCasino"
+}
+
+for _, file in ipairs(files_to_remove) do
+    if fs.exists(file) then
+        fs.remove(file)
+        print("  Удалено: " .. file)
+    end
+end
+
+-- Очистка временных файлов
+local tmp_files = fs.list("/tmp/")
+for _, file in ipairs(tmp_files) do
+    if file:match("^opencasino") or file:match("^oc_") or file:match("^casino") then
+        local full_path = "/tmp/" .. file
+        if fs.exists(full_path) then
+            fs.remove(full_path)
+            print("  Удалено: " .. full_path)
+        end
+    end
+end
+
+print("Загрузка новых файлов...")
+os.sleep(1)
+
 -- Загрузка библиотек с вашего GitHub
 if not fs.exists("/lib/Sky.lua") then
+    print("  Загрузка sky.lua...")
     shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/sky.lua /lib/Sky.lua")
 end
+
 if not fs.exists("/lib/image.lua") then
+    print("  Загрузка image.lua...")
     shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/image.lua /lib/image.lua")
 end
 
@@ -27,8 +66,8 @@ local g = component.gpu
 event.shouldInterrupt = function () return false end
 
 --------------------Настройки--------------------
-local WIGHT = 146  -- число
-local HEIGHT = 42  -- число
+local WIGHT = 146
+local HEIGHT = 42
 local AUTOEXIT = 30
 local COLOR1 = 0x00ffff
 local COLOR2 = 0x0000ff
@@ -40,7 +79,9 @@ local MAX_STAVKA = 500
 -------------------------------------------------
 
 -- Загрузка логотипа
-if not fs.exists(shell.getWorkingDirectory() .. "/LogoCasino.lua") then
+local logo_path = shell.getWorkingDirectory() .. "/LogoCasino.lua"
+if not fs.exists(logo_path) then
+    print("  Загрузка LogoCasino.lua...")
     shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/LogoCasino.lua")
 end
 
@@ -89,15 +130,16 @@ end
 
 function money_all()
     local file
-    if fs.exists(shell.getWorkingDirectory() .. "/moneyCasino") then
-        file = io.open(shell.getWorkingDirectory() .. "/moneyCasino", "r")
+    local money_path = shell.getWorkingDirectory() .. "/moneyCasino"
+    if fs.exists(money_path) then
+        file = io.open(money_path, "r")
         local text = file:read(9999999)
         file:close()
         local object = serial.unserialize(text)
         summa_money = {object[1] or 0, object[2] or 0}
         return summa_money[1], summa_money[2]
     else
-        file = io.open(shell.getWorkingDirectory() .. "/moneyCasino", "w")
+        file = io.open(money_path, "w")
         file:write("{0,0}")
         file:close()
         summa_money = {0,0}

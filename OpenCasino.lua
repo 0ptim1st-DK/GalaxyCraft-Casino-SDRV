@@ -629,9 +629,13 @@ function Exit()
     Images.cherry(mid - 30, 24)
     Images.apple(mid - 10, 24)
     Images.meat(mid + 10, 24)
+    
+    -- Безопасное удаление пользователей
     local users = computer.users()
-    for i = 1, #users do
-        computer.removeUser(users[i])
+    if users then
+        for i = 1, #users do
+            computer.removeUser(users[i])
+        end
     end
 end
 

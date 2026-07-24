@@ -13,34 +13,11 @@ local fs = require("filesystem")
 local unicode = require("unicode")
 local serial = require("serialization")
 
-print("\n=== OpenCasino Installer ===")
-print("Очистка старых файлов...")
-
--- Очистка старых библиотек
-local files_to_remove = {
-    "/lib/Sky.lua",
-    "/lib/image.lua",
-    shell.getWorkingDirectory() .. "/LogoCasino.lua"
-}
-
-for _, file in ipairs(files_to_remove) do
-    if fs.exists(file) then
-        fs.remove(file)
-        print("  Удалено: " .. file)
-    end
-end
-
-print("Загрузка новых файлов...")
-os.sleep(1)
-
 -- Загрузка библиотек с вашего GitHub
 if not fs.exists("/lib/Sky.lua") then
-    print("  Загрузка sky.lua...")
     shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/sky.lua /lib/Sky.lua")
 end
-
 if not fs.exists("/lib/image.lua") then
-    print("  Загрузка image.lua...")
     shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/image.lua /lib/image.lua")
 end
 
@@ -50,7 +27,6 @@ local g = component.gpu
 event.shouldInterrupt = function () return false end
 
 --------------------Настройки--------------------
--- ЯВНО указываем числа
 local WIGHT = 146
 local HEIGHT = 42
 local AUTOEXIT = 30
@@ -63,21 +39,10 @@ local STAVKA = 10
 local MAX_STAVKA = 500
 -------------------------------------------------
 
--- Загрузка логотипа
-local logo_path = shell.getWorkingDirectory() .. "/LogoCasino.lua"
-if not fs.exists(logo_path) then
-    print("  Загрузка LogoCasino.lua...")
-    shell.execute("wget https://raw.githubusercontent.com/0ptim1st-DK/GalaxyCraft-Casino-SDRV/main/LogoCasino.lua")
-end
-
 print("\nИнициализация...")
 os.sleep(2)
 print("Запуск программы...")
 os.sleep(2)
-
--- ПРИНУДИТЕЛЬНО преобразуем в числа (на всякий случай)
-WIGHT = tonumber(WIGHT) or 146
-HEIGHT = tonumber(HEIGHT) or 42
 
 local mid = (WIGHT - 32) / 2 + 32
 local images = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
@@ -88,19 +53,16 @@ local smile = false
 local summa_money
 local stavka = STAVKA
 
--- Проверяем, есть ли чат-бокс
 if component.isAvailable("chat_box") then
     component.chat_box.setName("§6G§7")
 end
 
--- Проверяем разрешение экрана
 local maxW, maxH = g.getResolution()
 if WIGHT > maxW then WIGHT = maxW end
 if HEIGHT > maxH then HEIGHT = maxH end
 
--- ЯВНО передаем числа
-g.setResolution(tonumber(WIGHT), tonumber(HEIGHT))
-Sky.logo("OpenCasino", COLOR1, COLOR2, tonumber(WIGHT), tonumber(HEIGHT))
+g.setResolution(WIGHT, HEIGHT)
+Sky.logo("OpenCasino", COLOR1, COLOR2, WIGHT, HEIGHT)
 
 function Wins(win1, win2, win3)
     if win1 == 1 and win2 == 1 and win3 == 1 then return 15
@@ -315,7 +277,10 @@ function Exit()
     g.fill(3,2,26,HEIGHT-2,' ')
     g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
     Rules()
-    Sky.drawImage(mid - 25, 7, shell.getWorkingDirectory() .. "/LogoCasino.lua")
+    -- Логотип заменен на простой текст
+    g.setForeground(0xFFD700)
+    g.set(mid - 25, 7, "OpenCasino")
+    g.setForeground(COLOR1)
     image.cherry(mid - 30, 24)
     image.apple(mid - 10, 24)
     image.meat(mid + 10, 24)

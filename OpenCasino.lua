@@ -159,15 +159,14 @@ function Sky.Button(x,y,w,h,col1,col2,text)
 end
 
 function Sky.drawImage(x,y,path)
-    -- Заглушка - просто выводим текст
     g.setForeground(0xFFD700)
     g.set(x, y, "OpenCasino")
 end
 
 -- ============================================
--- ============ БИБЛИОТЕКА IMAGE ==============
+-- ============ БИБЛИОТЕКА ИЗОБРАЖЕНИЙ ========
 -- ============================================
-local ImageLib = {}
+local Images = {}
 
 local COLORS = {
     RED = 0xFF0000,
@@ -208,7 +207,7 @@ local function drawSprite(x, y, data, colors)
     end
 end
 
-function ImageLib.cherry(x, y)
+function Images.cherry(x, y)
     local data = {
         {" ", "█", "█", "█", " ", " "},
         {"█", "█", "█", "█", "█", " "},
@@ -229,7 +228,7 @@ function ImageLib.cherry(x, y)
     g.set(x + 2, y - 2, "/")
 end
 
-function ImageLib.seven(x, y)
+function Images.seven(x, y)
     g.setForeground(COLORS.SEVEN_RED)
     g.set(x, y, "█████")
     g.set(x, y + 1, "   █ ")
@@ -241,7 +240,7 @@ function ImageLib.seven(x, y)
     g.set(x + 3, y + 4, "██")
 end
 
-function ImageLib.diamond(x, y)
+function Images.diamond(x, y)
     local data = {
         {" ", " ", "█", " ", " "},
         {" ", "█", "█", "█", " "},
@@ -259,7 +258,7 @@ function ImageLib.diamond(x, y)
     drawSprite(x, y, data, colors)
 end
 
-function ImageLib.orange(x, y)
+function Images.orange(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
         {"█", "█", "█", "█", "█"},
@@ -279,7 +278,7 @@ function ImageLib.orange(x, y)
     g.set(x + 2, y - 1, "*")
 end
 
-function ImageLib.pickaxe(x, y)
+function Images.pickaxe(x, y)
     g.setForeground(COLORS.PICKAXE_GRAY)
     g.set(x + 2, y, "█")
     g.set(x + 1, y + 1, "███")
@@ -291,7 +290,7 @@ function ImageLib.pickaxe(x, y)
     g.set(x + 2, y + 6, "█")
 end
 
-function ImageLib.cheese(x, y)
+function Images.cheese(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
         {"█", "█", "█", "█", "█"},
@@ -309,7 +308,7 @@ function ImageLib.cheese(x, y)
     drawSprite(x, y, data, colors)
 end
 
-function ImageLib.pokeball(x, y)
+function Images.pokeball(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
         {"█", "█", "█", "█", "█"},
@@ -327,7 +326,7 @@ function ImageLib.pokeball(x, y)
     drawSprite(x, y, data, colors)
 end
 
-function ImageLib.meat(x, y)
+function Images.meat(x, y)
     local data = {
         {" ", "█", "█", " ", " "},
         {"█", "█", "█", "█", " "},
@@ -348,7 +347,7 @@ function ImageLib.meat(x, y)
     g.set(x + 3, y + 3, "█")
 end
 
-function ImageLib.apple(x, y)
+function Images.apple(x, y)
     local data = {
         {" ", "█", "█", "█", " "},
         {"█", "█", "█", "█", "█"},
@@ -393,7 +392,7 @@ print("Инициализация...")
 os.sleep(1)
 
 local mid = (WIGHT - 32) / 2 + 32
-local images = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
+local image_list = {"cherry", "seven", "diamond", "orange", "pickaxe", "cheese", "pokeball", "meat", "apple"}
 local login = false
 local timer = 0
 local smile = false
@@ -511,26 +510,26 @@ function Game()
     Sky.MidR(WIGHT,21, "Максимальная ставка: " .. MAX_STAVKA .. "$")
     local x, y = mid - 30, 24
     for i = 1, 3 do
-        Image(images[math.random(1,#images)], x, y)
+        DrawImage(image_list[math.random(1,#image_list)], x, y)
         x = x + 20
     end
 end
 
-function Image(pic, x, y)
-    if pic == "cherry" then ImageLib.cherry(x, y)
-    elseif pic == "seven" then ImageLib.seven(x, y)
-    elseif pic == "diamond" then ImageLib.diamond(x, y)
-    elseif pic == "orange" then ImageLib.orange(x, y)
-    elseif pic == "pickaxe" then ImageLib.pickaxe(x, y)
-    elseif pic == "cheese" then ImageLib.cheese(x, y)
-    elseif pic == "pokeball" then ImageLib.pokeball(x, y)
-    elseif pic == "meat" then ImageLib.meat(x, y)
-    elseif pic == "apple" then ImageLib.apple(x, y)
+function DrawImage(pic, x, y)
+    if pic == "cherry" then Images.cherry(x, y)
+    elseif pic == "seven" then Images.seven(x, y)
+    elseif pic == "diamond" then Images.diamond(x, y)
+    elseif pic == "orange" then Images.orange(x, y)
+    elseif pic == "pickaxe" then Images.pickaxe(x, y)
+    elseif pic == "cheese" then Images.cheese(x, y)
+    elseif pic == "pokeball" then Images.pokeball(x, y)
+    elseif pic == "meat" then Images.meat(x, y)
+    elseif pic == "apple" then Images.apple(x, y)
     end
 end
 
 function check_rand(rand)
-    if rand == #images then return 1
+    if rand == #image_list then return 1
     else return rand + 1
     end
 end
@@ -539,18 +538,18 @@ function Table(rand1, rand2, rand3)
     local win = {}
     for i = 1, 60 do
         if i <= 20 then
-            Image(images[rand1], mid-30, 24)
-            Image(images[rand1], mid-10, 24)
-            Image(images[rand1], mid+10, 24)
+            DrawImage(image_list[rand1], mid-30, 24)
+            DrawImage(image_list[rand1], mid-10, 24)
+            DrawImage(image_list[rand1], mid+10, 24)
             win[1] = rand1
             rand1 = check_rand(rand1)
         elseif i <= 40 then
-            Image(images[rand2], mid-10, 24)
-            Image(images[rand2], mid+10, 24)
+            DrawImage(image_list[rand2], mid-10, 24)
+            DrawImage(image_list[rand2], mid+10, 24)
             win[2] = rand2
             rand2 = check_rand(rand2)
         elseif i <= 60 then
-            Image(images[rand3], mid+10, 24)
+            DrawImage(image_list[rand3], mid+10, 24)
             win[3] = rand3
             rand3 = check_rand(rand3)
         end
@@ -571,9 +570,9 @@ function Start(w, h, nick, stavka)
         Sky.MidL(WIGHT,35,"      Идёт игра...      ")
         Sky.MidL(WIGHT,32, " [ " .. Sky.Money(nick) .. " ] ")
         Sky.MidR(WIGHT,35, "                    Крутим на " .. stavka .. "$                    ")
-        local rand1 = math.random(1, #images)
-        local rand2 = math.random(1, #images)
-        local rand3 = math.random(1, #images)
+        local rand1 = math.random(1, #image_list)
+        local rand2 = math.random(1, #image_list)
+        local rand3 = math.random(1, #image_list)
         local bonus = Wins(Table(rand1, rand2, rand3))
         g.setForeground(COLOR1)
         if bonus ~= 0 then
@@ -624,13 +623,12 @@ function Exit()
     g.fill(3,2,26,HEIGHT-2,' ')
     g.fill(31,2,WIGHT-32,HEIGHT-2,' ')
     Rules()
-    -- Простой логотип текстом
     g.setForeground(0xFFD700)
     g.set(mid - 25, 7, "OpenCasino")
     g.setForeground(COLOR1)
-    ImageLib.cherry(mid - 30, 24)
-    ImageLib.apple(mid - 10, 24)
-    ImageLib.meat(mid + 10, 24)
+    Images.cherry(mid - 30, 24)
+    Images.apple(mid - 10, 24)
+    Images.meat(mid + 10, 24)
     local users = computer.users()
     for i = 1, #users do
         computer.removeUser(users[i])
@@ -652,7 +650,9 @@ function Say(bonus, nick, stavka)
     if component.isAvailable("chat_box") then
         component.chat_box.say(msg)
     end
-endfunction getStavka(w, h)
+end
+
+function getStavka(w, h)
     if w >= mid-30 and w <= mid-25 and h >= 37 and h <= 39 then
         stavka = stavka - 10
     elseif w >= mid-23 and w <= mid-19 and h >= 37 and h <= 39 then

@@ -12,7 +12,8 @@ local term = require("term")
 local shell = require("shell")
 local fs = require("filesystem")
 local unicode = require("unicode")
-local serial = require("serialization")local g = component.gpu
+local serial = require("serialization")
+local g = component.gpu
 
 -- ============================================
 -- ============ БИБЛИОТЕКА SKY ================
@@ -772,7 +773,7 @@ function Game()
     g.setForeground(COLOR1)
     Sky.MidR(WIGHT,38,"  Ставка " .. stavka .. "$  ")
     
-    -- ===== РАМКА ВОКРУГ БАРАБАНОВ =====
+    -- РАМКА
     local frame_x = mid - 74
     local frame_y = 18
     local frame_w = 140
@@ -797,7 +798,7 @@ function Game()
     local slot_x = frame_x + (frame_w / 2) - (unicode.len(slot_text) / 2)
     g.set(slot_x, frame_y, slot_text)
     
-    -- Барабаны внутри рамки (шаг 48 для картинок 46x24)
+    -- Барабаны
     local step = 48
     local x, y = frame_x + 6, frame_y + 4
     for i = 1, 3 do
@@ -853,15 +854,15 @@ function Table(rand1, rand2, rand3)
 end
 
 function Wins(win1, win2, win3)
-    if win1 == 1 and win2 == 1 and win3 == 1 then return 40  -- алмаз
-    elseif win1 == 2 and win2 == 2 and win3 == 2 then return 15  -- вишня
-    elseif win1 == 3 and win2 == 3 and win3 == 3 then return 30  -- яблоко
-    elseif win1 == 4 and win2 == 4 and win3 == 4 then return 12  -- банан
-    elseif win1 == 5 and win2 == 5 and win3 == 5 then return 17  -- апельсин
-    elseif win1 == 6 and win2 == 6 and win3 == 6 then return 100 -- семёрка
-    elseif win1 == 7 and win2 == 7 and win3 == 7 then return 20  -- подкова
-    elseif win1 == 8 and win2 == 8 and win3 == 8 then return 10  -- клевер
-    elseif win1 == 9 and win2 == 9 and win3 == 9 then return 25  -- монета
+    if win1 == 1 and win2 == 1 and win3 == 1 then return 40
+    elseif win1 == 2 and win2 == 2 and win3 == 2 then return 15
+    elseif win1 == 3 and win2 == 3 and win3 == 3 then return 30
+    elseif win1 == 4 and win2 == 4 and win3 == 4 then return 12
+    elseif win1 == 5 and win2 == 5 and win3 == 5 then return 17
+    elseif win1 == 6 and win2 == 6 and win3 == 6 then return 100
+    elseif win1 == 7 and win2 == 7 and win3 == 7 then return 20
+    elseif win1 == 8 and win2 == 8 and win3 == 8 then return 10
+    elseif win1 == 9 and win2 == 9 and win3 == 9 then return 25
     elseif win1 == win2 or win2 == win3 then return 2
     elseif win1 == win3 then return 1
     else return 0
